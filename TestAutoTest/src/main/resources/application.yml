@@ -1,0 +1,27 @@
+spring:
+  messages:
+    basename: i18n/messages
+    cache-duration: -1
+    encoding: UTF-8
+  mvc:
+    view:
+      prefix: /public/
+      suffix: .html
+  # db connection
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  datasource:
+    url:   jdbc:h2:file:../h2db
+    username: sa
+    password: 
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties: 
+      dialect: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    
+ 
