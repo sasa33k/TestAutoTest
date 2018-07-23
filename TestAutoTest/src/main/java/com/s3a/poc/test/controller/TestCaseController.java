@@ -21,7 +21,10 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.s3a.poc.test.model.DbTestCase;
@@ -32,10 +35,17 @@ import com.s3a.poc.test.repository.SummaryDescRepository;
 import com.s3a.poc.test.util.ImportTestCase;
 import com.s3a.poc.test.util.ParseTestSteps;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 
 
 @RestController
 @RequestMapping("/admin")
+@Api(description = "admin functions on H2DB")
 public class TestCaseController {
     public static final String EXCEL_FILE_PATH = "src/test/test_sample.xlsx";
     public static final Integer SUMMARY_PREFIX = 0;
@@ -55,8 +65,8 @@ public class TestCaseController {
 //
 //	    @Autowired
 //	    SummaryDescRepository repo;
-	    
-	    @RequestMapping("/save")               /*Issue with first double Entry, Checking when previous saving in progress*/
+	    @ApiOperation(value = "Save Test Case from excel", notes = "Save Test Case from excel")
+	    @RequestMapping(value = "/save", method =  RequestMethod.GET, produces = "application/json")               /*Issue with first double Entry, Checking when previous saving in progress*/
 	    public String insertRecord (){
 			Date CreateDateTime = new Date();
 	    	
@@ -85,15 +95,33 @@ public class TestCaseController {
 	    
 
 
-	    
-	    @RequestMapping("/max")
+	    @ApiOperation(value = "Save Test Case from excel file specified", notes = "Just input file path")
+	    @RequestMapping(value = "/save2", method =  RequestMethod.POST)               /*Issue with first double Entry, Checking when previous saving in progress*/
+	    @ApiImplicitParam(name = "path", value = "File Path", required = true, paramType = "body", dataType = "String")
+	    public String insertRecord2 (@RequestBody String path){
+			Date CreateDateTime = new Date();
+	    	
+	 
+	    	try {
+				ImportTestCase.TestCaseParser(path, TC_HEADER, CreateDateTime, descRep.getMaxId()+1, descRep, tcRep, tsRep);
+		        return "Done";
+		        
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		        return "FAIL";
+			}
+	    }
+
+	    @ApiOperation(value = "Show Maximum Version", notes = "Get Latest Version ID")
+	    @RequestMapping(value = "/max", method =  RequestMethod.GET)
 	    public String getMax(){
 
 		        return String.valueOf(descRep.getMaxId());
 	    }
 	    
-	    
-	    @RequestMapping("/deleteAll")
+	    @ApiOperation(value = "Delete All Data", notes = "Delete All Data")
+	    @RequestMapping(value = "/deleteAll", method =  RequestMethod.GET)
 	    public String deleteAll(){
 
 	    	try {
@@ -111,9 +139,9 @@ public class TestCaseController {
 	    }
 	    
 	    
-
-	    @RequestMapping("/findBySubId/{ver}/{subId}")
-	    public String findBySubId(@PathVariable int ver, @PathVariable String subId){
+	    @ApiOperation(value = "List Step IDs", notes = "List all steps ID by Sub Case ID")
+	    @RequestMapping(value = "/findBySubId/{ver}/{subId}", method =  RequestMethod.GET, produces = "application/json")
+	    public String findBySubId(@ApiParam("Version") @PathVariable int ver, @ApiParam("Sub Case ID") @PathVariable String subId){
 
 	    	try {
 
@@ -126,9 +154,9 @@ public class TestCaseController {
 			}
 	    }
 
-
-	    @RequestMapping("/findStepsBySubId/{ver}/{subId}")
-	    public String findStepsBySubId (@PathVariable int ver, @PathVariable String subId) {
+	    @ApiOperation(value = "List all Steps Details", notes = "List all steps by Sub Case ID")
+	    @RequestMapping(value = "/findStepsBySubId/{ver}/{subId}", method =  RequestMethod.GET, produces = "application/json")
+	    public String findStepsBySubId (@ApiParam("Version") @PathVariable int ver, @ApiParam("Sub Case ID") @PathVariable String subId) {
 
 	    	try {
 	    		 List<DbTestCase> tc = tcRep.findByVersionAndSubId(ver, subId);
@@ -143,9 +171,11 @@ public class TestCaseController {
 			}
 	    }
 	    
-	    
-	    @RequestMapping("/findTestList/{testList}")
-	    public String findTestList (@PathVariable String testList) {
+
+	    @ApiOperation(value = "Test Parse Test List", notes = "Just for testing")
+	    @ResponseBody
+	    @RequestMapping(value = "/findTestList/{testList}", method =  RequestMethod.GET)
+	    public String findTestList (@ApiParam("Test List") @PathVariable String testList) {
 
 	    	try {
 //	    		List<String> testListData = new ArrayList<String>(Arrays.asList(testList.split(",")));
@@ -192,8 +222,8 @@ public class TestCaseController {
 //	        }
 //	    }
 	       
-	       
-	    @RequestMapping("/findall")
+	    @ApiOperation(value = "Find all Test Cases", notes = "find all")
+	    @RequestMapping(value = "/findall", method =  RequestMethod.GET)
 	    public String findAll(){
 	        String result = "";
 	           

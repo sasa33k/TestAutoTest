@@ -35,7 +35,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
             //http://localhost:8080/vendors/bootstrap/dist/css/bootstrap.min.css
-                .antMatchers("/", "/home","/index.html","/h2-console/**","/build/**","/vendors/**","i18n/**","/admin/**").permitAll()
+                .antMatchers("/", "/home","/index.html","/h2-console/**","/swagger-ui/**","/build/**","/vendors/**","i18n/**","/admin/**").permitAll()
 //                .anyRequest().authenticated()
                   .and()
         		  .exceptionHandling().accessDeniedPage("/index.html#/start")
