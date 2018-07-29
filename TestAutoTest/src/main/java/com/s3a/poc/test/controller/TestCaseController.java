@@ -80,18 +80,7 @@ public class TestCaseController {
 		        return "FAIL";
 			}
 	    	
-	    	
-	    	
-	    	
-//	        repository.save(new DbTestCase("TSID", "TSDesc",
-//	    			"MID","Module", "Function","TCID", "SubID", 
-//	    			"TcType","TcDesc", "TcResultDesc",true, 1, 
-//	    			"PreReq","TSteps", "TBeforeRun","TAfterRun", "TSkip") );
-//	        repository.save(new DbTestCase("TSID2", "TSDesc2",
-//	    			"MID2","Module2", "Function2","TCID2", "SubID2", 
-//	    			"TcType2","TcDesc2", "TcResultDesc2",true, 2, 
-//	    			"PreReq2","TSteps2", "TBeforeRun2","TAfterRun2", "TSkip2") );
-	    }
+	 }
 	    
 
 

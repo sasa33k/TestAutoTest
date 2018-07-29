@@ -16,3 +16,5 @@ NO AUTO TEST FUNCTION YET
 * Siku Test integration
 * Result handling
 * Dashboards & panels
+
+** Playing on String Parsing {A,B}2,C ==> A,B,A,B,C [BraceExpansion]
